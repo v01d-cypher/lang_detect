@@ -3,25 +3,29 @@ const Langdetect = require("langdetect");
 const IsoConv = require("iso-language-converter");
 
 export async function detectLanguage(ctx: Context) {
-  if (ctx.request.body.hasOwnProperty("text")) {
-    let text = ctx.request.body.text;
-    try {
-      let result = await Langdetect.detect(text);
-      let final = {
-        text: text,
-        language: IsoConv(result[0].lang),
-        confidence: result[0].prob
-      };
-      ctx.ok(final);
-    } catch (err) {
+  // BodyParser will return {} if parsing fails.
+  if (ctx.request.body) {
+    // If we don't have "text" in the JSON body, we can't continue.
+    if (ctx.request.body.hasOwnProperty("text")) {
+      let text = ctx.request.body.text;
+      try {
+        let result = await Langdetect.detect(text);
+        let final = {
+          text: text,
+          language: IsoConv(result[0].lang),
+          confidence: result[0].prob
+        };
+        ctx.ok(final);
+      } catch (err) {
+        ctx.badRequest({
+          error: "Language detection failed: " + err.message
+        });
+      }
+    } else {
       ctx.badRequest({
-        error: "Language detection failed: " + err.message
+        error: "Please supply correct JSON payload"
       });
     }
-  } else {
-    ctx.badRequest({
-      error: "Please supply correct JSON payload"
-    });
   }
 }
 
