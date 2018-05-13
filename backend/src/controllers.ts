@@ -10,9 +10,17 @@ export async function detectLanguage(ctx: Context) {
       let text = ctx.request.body.text;
       try {
         let result = await Langdetect.detect(text);
+
+        // IsoConv doesn't handle zh-cn, zh-tw. They don't seem standard anyway.
+        let lang = IsoConv(result[0].lang) || result[0].lang;
+        if (lang == "zh-cn") {
+          lang = "Simplified Chinese";
+        } else if (lang == "zh-tw") {
+          lang = "Traditional Chinese";
+        }
         let final = {
           text: text,
-          language: IsoConv(result[0].lang),
+          language: lang,
           confidence: result[0].prob
         };
         ctx.ok(final);
@@ -23,7 +31,7 @@ export async function detectLanguage(ctx: Context) {
       }
     } else {
       ctx.badRequest({
-        error: "Please supply correct JSON payload"
+        error: "Please supply a correct JSON payload."
       });
     }
   }
