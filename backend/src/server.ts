@@ -4,7 +4,7 @@ const BodyParser = require("koa-bodyparser");
 const Helmet = require("koa-helmet");
 const Cors = require("@koa/cors");
 const Respond = require("koa-respond");
-//const Serve = require("koa-static");
+const Serve = require("koa-static");
 
 import { routes } from "./routes";
 
@@ -27,6 +27,9 @@ app.use(
 );
 
 app.use(routes);
+if (process.env.NODE_ENVIRONMENT === "production") {
+  app.use(Serve("./build"));
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API server started on ${port}`));

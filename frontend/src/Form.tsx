@@ -37,14 +37,17 @@ export default class Form extends React.Component<any, IFormState> {
       return;
     }
     const request = async () => {
-      const response = await fetch("http://localhost:3080/api/detect", {
-        body: JSON.stringify({ text: this.state.value }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        method: "POST"
-      });
+      const response = await fetch(
+        process.env.REACT_APP_API_SERVER + "/api/detect",
+        {
+          body: JSON.stringify({ text: this.state.value }),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          method: "POST"
+        }
+      );
 
       const json = await response.json();
       if (json.error) {
@@ -75,7 +78,9 @@ export default class Form extends React.Component<any, IFormState> {
 
   public supportedLanguages = () => {
     const request = async () => {
-      const response = await fetch("http://localhost:3080/api/languages");
+      const response = await fetch(
+        process.env.REACT_APP_API_SERVER + "/api/languages"
+      );
       this.setState({ supportedLanguages: await response.json() });
     };
 
