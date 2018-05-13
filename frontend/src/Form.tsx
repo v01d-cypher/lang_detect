@@ -16,7 +16,7 @@ const defaultState = {
   language: "",
   supportedLanguages: [],
   text: "",
-  value: "Enter text here - 1MB size limit."
+  value: ""
 };
 
 export default class Form extends React.Component<any, IFormState> {
@@ -30,8 +30,14 @@ export default class Form extends React.Component<any, IFormState> {
   };
 
   public handleSubmit = (event: any) => {
+    event.preventDefault();
+    // Basic validation
+    if (this.state.value && this.state.value.length > 1000000) {
+      alert("Maximum text length is 1Mb.");
+      return;
+    }
     const request = async () => {
-      const response = await fetch("http://localhost:3080/detect", {
+      const response = await fetch("http://localhost:3080/api/detect", {
         body: JSON.stringify({ text: this.state.value }),
         headers: {
           Accept: "application/json",
@@ -51,6 +57,7 @@ export default class Form extends React.Component<any, IFormState> {
       } else {
         this.setState({
           confidence: json.confidence,
+          error: "",
           language: json.language,
           text: json.text
         });
@@ -58,16 +65,17 @@ export default class Form extends React.Component<any, IFormState> {
     };
 
     request();
-    event.preventDefault();
   };
 
   public handleClear = () => {
+    const languages = this.state.supportedLanguages;
     this.setState(defaultState);
+    this.setState({ supportedLanguages: languages });
   };
 
   public supportedLanguages = () => {
     const request = async () => {
-      const response = await fetch("http://localhost:3080/languages");
+      const response = await fetch("http://localhost:3080/api/languages");
       this.setState({ supportedLanguages: await response.json() });
     };
 
@@ -78,6 +86,8 @@ export default class Form extends React.Component<any, IFormState> {
     return (
       <>
         <form onSubmit={this.handleSubmit}>
+          <i>Enter text below - 1Mb character limit.</i>
+          <br />
           <textarea
             rows={10}
             cols={50}
@@ -86,14 +96,18 @@ export default class Form extends React.Component<any, IFormState> {
           />
           <br />
           <input type="button" value="Clear" onClick={this.handleClear} />
-          <input type="submit" value="Submit" />
+          <input
+            type="submit"
+            disabled={!this.state.value || this.state.value.length > 1000000}
+            value="Submit"
+          />
         </form>
         <Result result={this.state} />
         <br />
         <br />
         <input
           type="button"
-          value="Supported Languages"
+          value="Get Supported Languages"
           onClick={this.supportedLanguages}
         />
         <ul>

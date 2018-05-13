@@ -16,7 +16,7 @@ app.use(Respond());
 
 app.use(
   BodyParser({
-    enableTypes: ["json", "form"],
+    enableTypes: ["json"],
     jsonLimit: "1mb",
     formLimit: "1mb",
     strict: true,
@@ -28,5 +28,5 @@ app.use(
 
 app.use(routes);
 
-const port = process.env.PORT || 3080;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API server started on ${port}`));
