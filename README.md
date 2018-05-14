@@ -1,6 +1,8 @@
 # lang_detect
 This application uses Koa running on Node as the backend and React as the frontend.
 
+The language detection is done via `langdetect`: (https://www.npmjs.com/package/langdetect) which was a Google Code project (https://code.google.com/archive/p/language-detection/)
+
 ### Usage
 The **backend** API expects and responds with **JSON** payloads. There are two methods available via REST calls:
 
