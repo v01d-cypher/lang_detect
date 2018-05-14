@@ -21,4 +21,4 @@ Start the frontend with `npm start`.
 
 Configure environment variables in `.env`
 
-Building the frontend with `npm run build` will place the output in a **'build'** folder in the backend folder. To view the appliction, start the backend in production mode which will trigger `NODE_ENVIRONMENT=production` and serve the frontend statically.
+Building the frontend with `npm run build` will place the output in a **'build'** folder in the backend folder. To view the application, start the backend in production mode which will trigger `NODE_ENVIRONMENT=production` and serve the frontend statically.
