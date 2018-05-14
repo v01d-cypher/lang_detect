@@ -12,9 +12,15 @@ export default class Result extends React.Component<any> {
         {this.props.result.error ? <b>Error: {this.props.result.error}</b> : ""}
         {this.props.result.text ? (
           <>
-            <p>Text Entered: {this.props.result.text}</p>
-            <p>Language Detected: {this.props.result.language}</p>
-            <p>Confidence: {this.props.result.confidence}</p>
+            <p>
+              <b>Text Entered:</b> {this.props.result.text}
+            </p>
+            <p>
+              <b>Language Detected:</b> {this.props.result.language}
+            </p>
+            <p>
+              <b>Confidence:</b> {this.props.result.confidence}
+            </p>
           </>
         ) : (
           ""
